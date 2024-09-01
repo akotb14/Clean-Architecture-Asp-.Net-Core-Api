@@ -24,9 +24,9 @@ Welcome to the **Clean Architecture ASP.NET Core API** repository! This project 
 This project is a Clean Architecture implementation of an ASP.NET Core API. The solution is structured into four distinct layers:
 
 - **API Layer:** Responsible for handling HTTP requests and responses.
-- **Application Layer:** Contains business logic, CQRS (Command Query Responsibility Segregation) with MediatR, services, middleware, and behaviors.
-- **Infrastructure Layer:** Includes database context, repository patterns, migrations, and external service integrations.
-- **Domain Layer:** Contains core entities, domain exceptions, and helper classes.
+- **Application Layer:** Contains business logic, CQRS (Command Query Responsibility Segregation) with MediatR, services, middleware, behaviors, and external service integrations.
+- **Infrastructure Layer:** Includes database context, repository patterns, migrations.
+- **Domain Layer:** Contains core entities, exceptions, and helper classes.
 
 ## Architecture
 
@@ -36,7 +36,6 @@ The **API Layer** is responsible for handling HTTP requests and returning approp
 
 - **Controllers:** The entry point for handling incoming API requests.
 - **Routing & Versioning:** Manages routing and API versioning.
-- **Filters & Middleware:** Custom error handling, authentication, and authorization are managed here.
 
 ### Application Layer
 
@@ -45,8 +44,10 @@ The **Application Layer** contains the core business logic and application flow,
 - **CQRS with MediatR:** Implements the Command Query Responsibility Segregation pattern using MediatR for handling commands and queries.
 - **Services:** Encapsulate business logic and operations.
 - **Middleware:** Custom middleware, including error handling.
+- **Filters & Middleware:** Custom error handling, authentication, and authorization are managed here.
 - **Behaviors:** Built with FluentValidation for validation, logging, and other cross-cutting concerns.
-
+- **External Services:** Integrations with external services (e.g., email, logging).
+  
 ### Infrastructure Layer
 
 The **Infrastructure Layer** handles data access and external service interactions, including:
@@ -54,15 +55,15 @@ The **Infrastructure Layer** handles data access and external service interactio
 - **Database Context:** Manages the database connection and entity configurations.
 - **Repositories:** Implements the repository pattern with specific and generic repositories.
 - **Migrations:** Manages database schema changes.
-- **External Services:** Integrations with external services (e.g., email, logging).
+
 
 ### Domain Layer
 
 The **Domain Layer** is the core of the application and contains:
 
 - **Entities:** Represent the tables in the database.
-- **Exceptions:** Custom exceptions specific to the domain.
-- **Helpers:** Utility classes and methods that assist with domain logic.
+- **Exceptions:** Custom exceptions.
+- **Helpers:** Utility classes and Confiuration class.
 
 ## Features
 
@@ -86,7 +87,7 @@ The **Domain Layer** is the core of the application and contains:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/clean-architecture-aspnet-core-api.git
+   git clone https://github.com/akotb14/clean-architecture-aspnet-core-api.git
    cd clean-architecture-aspnet-core-api
 
 ## Configuration
