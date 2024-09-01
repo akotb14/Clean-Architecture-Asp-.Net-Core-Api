@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Features.ApplicationUser.Commands.Requests;
 using CleanArchitecture.Application.ResultHandler;
+using CleanArchitecture.Application.Services.CurrentUserService;
 using CleanArchitecture.Application.Services.EmailsService;
 using CleanArchitecture.Application.Services.FileService;
 using CleanArchitecture.Domain.Entities.Identity;
@@ -25,7 +26,8 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelper _urlHelper;
         private readonly IFileService _fileService;
-        public ApplicationUserCommand(IUserRepository userRepository, IMapper mapper, IEmailsService emailService, IEmailsService emailsService, IHttpContextAccessor httpContextAccessor, IUrlHelper urlHelper, IFileService fileService)
+        private readonly ICurrentUserService _currentUserService;
+        public ApplicationUserCommand(IUserRepository userRepository, IMapper mapper, IEmailsService emailService, IEmailsService emailsService, IHttpContextAccessor httpContextAccessor, IUrlHelper urlHelper, IFileService fileService, ICurrentUserService currentUserService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -34,6 +36,7 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
             _httpContextAccessor = httpContextAccessor;
             _urlHelper = urlHelper;
             _fileService = fileService;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Response<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
@@ -94,6 +97,9 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
             var user = await _userRepository.GetUserManager().FindByIdAsync(request.Id);
             if (user == null) { return NotFound<string>("User not found"); }
 
+            var currentUserId = _currentUserService.GetUserId();
+            if (user.Id != currentUserId) return NotFound<string>("you are not right user");
+
             var checkemail = await _userRepository.GetUserManager().FindByEmailAsync(request.Email);
             var checkuserName = await _userRepository.GetUserManager().FindByNameAsync(request.UserName);
 
@@ -115,6 +121,10 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
         {
             var user = await _userRepository.GetUserManager().FindByIdAsync(request.UserId);
             if (user == null) { return NotFound<string>("User not found"); }
+
+            var currentUserId = _currentUserService.GetUserId();
+            if (user.Id != currentUserId) return NotFound<string>("you are not right user");
+
             var result = await _userRepository.GetUserManager().ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
             if (!result.Succeeded)
             {
@@ -127,6 +137,10 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
         {
             var user = await _userRepository.GetUserManager().FindByIdAsync(request.UserId);
             if (user == null) { return NotFound<string>("User not found"); }
+
+            var currentUserId = _currentUserService.GetUserId();
+            if (user.Id != currentUserId) return NotFound<string>("you are not right user");
+
             var file = request.ImageProfile;
             var reqContext = _httpContextAccessor.HttpContext.Request;
             var baseUrl = reqContext.Scheme + "://" + reqContext.Host;

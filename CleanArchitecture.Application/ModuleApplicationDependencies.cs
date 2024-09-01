@@ -1,5 +1,7 @@
 ﻿using CleanArchitecture.Application.Behaviors;
 using CleanArchitecture.Application.Services.AuthenticationService;
+using CleanArchitecture.Application.Services.CurrentUserService;
+using CleanArchitecture.Application.Services.CurrentUserServices;
 using CleanArchitecture.Application.Services.EmailsService;
 using CleanArchitecture.Application.Services.FileService;
 using FluentValidation;
@@ -15,6 +17,7 @@ namespace CleanArchitecture.Application
         {
             services.AddTransient<IEmailsService, EmailsService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             //Configuration Of Mediator
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
