@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Application.ResultHandler;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Application.CustomExtensionMethod
+namespace CleanArchitecture.Application.Extensions
 {
     public static class PaginatedListExtension
     {

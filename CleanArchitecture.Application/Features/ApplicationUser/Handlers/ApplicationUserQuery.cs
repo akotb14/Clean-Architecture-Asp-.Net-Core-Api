@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CleanArchitecture.Application.CustomExtensionMethod;
+using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Features.ApplicationUser.Queries.Requests;
 using CleanArchitecture.Application.Features.ApplicationUser.Queries.Response;
 using CleanArchitecture.Application.ResultHandler;

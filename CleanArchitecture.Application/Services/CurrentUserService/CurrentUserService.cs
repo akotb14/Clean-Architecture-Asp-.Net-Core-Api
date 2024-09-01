@@ -28,7 +28,7 @@ namespace CleanArchitecture.Application.Services.CurrentUserServices
             {
                 throw new UnauthorizedAccessException();
             }
-            return int.Parse(userId);
+            return userId;
         }
 
         public async Task<User> GetUserAsync()
