@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Repositories.GenericRepository
 {
@@ -19,9 +14,9 @@ namespace CleanArchitecture.Infrastructure.Repositories.GenericRepository
         IQueryable<T> GetTableAsTracking();
         Task<T> AddAsync(T entity);
         Task AddRangeAsync(ICollection<T> entities);
-        Task UpdateAsync(T entity);
+        Task<T> UpdateAsync(T entity);
         Task UpdateRangeAsync(ICollection<T> entities);
-        Task DeleteAsync(T entity);
+        Task<T> DeleteAsync(T entity);
 
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();

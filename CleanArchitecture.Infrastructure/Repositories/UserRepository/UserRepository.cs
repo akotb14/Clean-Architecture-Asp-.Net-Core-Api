@@ -26,9 +26,9 @@ namespace CleanArchitecture.Infrastructure.Repositories.UserRepository
             }
             return null;
         }
-        private UserOrderDirectionEnum? ParseUserOrderDirectionEnum(string orderBy)
+        private OrderDirectionEnum? ParseUserOrderDirectionEnum(string orderBy)
         {
-            if (Enum.TryParse(orderBy, true, out UserOrderDirectionEnum userOrderDirectionEnum))
+            if (Enum.TryParse(orderBy, true, out OrderDirectionEnum userOrderDirectionEnum))
             {
                 return userOrderDirectionEnum;
             }
@@ -37,35 +37,35 @@ namespace CleanArchitecture.Infrastructure.Repositories.UserRepository
         public IQueryable<User> OrderUser(IQueryable<User> queryable, string order, string orderDirection)
         {
             UserOrderEnum? orderEnum = ParseUserOrderEnum(order);
-            UserOrderDirectionEnum? directionEnum = ParseUserOrderDirectionEnum(orderDirection);
+            OrderDirectionEnum? directionEnum = ParseUserOrderDirectionEnum(orderDirection);
             switch (orderEnum)
             {
                 case UserOrderEnum.UserName:
-                    if (UserOrderDirectionEnum.Ascending == directionEnum)
+                    if (OrderDirectionEnum.Ascending == directionEnum)
                         queryable = queryable.OrderBy(e => e.UserName);
                     else
                         queryable = queryable.OrderByDescending(e => e.UserName);
                     break;
                 case UserOrderEnum.FullName:
-                    if (UserOrderDirectionEnum.Ascending == directionEnum)
+                    if (OrderDirectionEnum.Ascending == directionEnum)
                         queryable = queryable.OrderBy(e => e.FullName);
                     else
                         queryable = queryable.OrderByDescending(e => e.FullName);
                     break;
                 case UserOrderEnum.Email:
-                    if (UserOrderDirectionEnum.Ascending == directionEnum)
+                    if (OrderDirectionEnum.Ascending == directionEnum)
                         queryable = queryable.OrderBy(e => e.Email);
                     else
                         queryable = queryable.OrderByDescending(e => e.Email);
                     break;
                 case UserOrderEnum.PhoneNumber:
-                    if (UserOrderDirectionEnum.Ascending == directionEnum)
+                    if (OrderDirectionEnum.Ascending == directionEnum)
                         queryable = queryable.OrderBy(e => e.PhoneNumber);
                     else
                         queryable = queryable.OrderByDescending(e => e.PhoneNumber);
                     break;
                 case UserOrderEnum.Address:
-                    if (UserOrderDirectionEnum.Ascending == directionEnum)
+                    if (OrderDirectionEnum.Ascending == directionEnum)
                         queryable = queryable.OrderBy(e => e.Address);
                     else
                         queryable = queryable.OrderByDescending(e => e.Address);

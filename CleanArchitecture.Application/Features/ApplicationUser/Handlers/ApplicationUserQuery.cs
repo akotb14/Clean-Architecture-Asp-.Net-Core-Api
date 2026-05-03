@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Extensions;
 using CleanArchitecture.Application.Features.ApplicationUser.Queries.Requests;
 using CleanArchitecture.Application.Features.ApplicationUser.Queries.Response;
 using CleanArchitecture.Application.ResultHandler;
+using CleanArchitecture.Application.Services.CurrentUserService;
 using CleanArchitecture.Infrastructure.Repositories.UserRepository;
 using MediatR;
 
@@ -10,16 +11,18 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
 {
     public class ApplicationUserQuery : ResponseHandler,
         IRequestHandler<GetUserByIdQuery, Response<GetUserReponseQuery>>,
-        IRequestHandler<GetUserPaginationQuery, PaginatedResult<GetUserReponseQuery>>
+        IRequestHandler<GetUserPaginationQuery, PaginatedResult<GetUserReponseQuery>>,
+        IRequestHandler<GetProfileUserQuery, Response<GetUserReponseQuery>>
 
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-
-        public ApplicationUserQuery(IUserRepository userRepository, IMapper mapper)
+        private readonly ICurrentUserService _currentUserService;
+        public ApplicationUserQuery(IUserRepository userRepository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Response<GetUserReponseQuery>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
@@ -43,6 +46,13 @@ namespace CleanArchitecture.Application.Features.ApplicationUser.Handlers
             var userMapperPaginated = await _mapper.ProjectTo<GetUserReponseQuery>(users).ToPaginatedListAsync(request.PageNumber, request.PageSize);
             return userMapperPaginated;
 
+        }
+
+        public async Task<Response<GetUserReponseQuery>> Handle(GetProfileUserQuery request, CancellationToken cancellationToken)
+        {
+            var user = await _currentUserService.GetUserAsync();
+            var userMapper = _mapper.Map<GetUserReponseQuery>(user);
+            return Success(userMapper);
         }
     }
 }

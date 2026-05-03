@@ -19,17 +19,19 @@ namespace CleanArchitecture.Application.Extensions
                 Succeeded = true,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
-                Messages = "success"
+                Message = "success"
             };
             var items = await queryable.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             // return PaginatedResponse<T>.Success(items, count, pageNumber, pageSize);
+
             return new PaginatedResult<T>()
             {
                 Data = items,
                 Succeeded = true,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
-                Messages = "success"
+                Message = "success",
+                TotalCount = count
             };
         }
     }

@@ -28,8 +28,6 @@ namespace CleanArchitecture.Application.Features.Authentication.Handlers
             var user = await _userRepository.GetUserManager().FindByIdAsync(request.UserId);
             if (user == null) { return NotFound<string>(); }
 
-            var currentUserId = _currentUserService.GetUserId();
-            if (user.Id != currentUserId) return NotFound<string>("you are not right user");
 
             var confirmEmail = await _userRepository.GetUserManager().ConfirmEmailAsync(user, request.Code);
             if (!confirmEmail.Succeeded)

@@ -3,10 +3,13 @@ using CleanArchitecture.Application.ResultHandler;
 using CleanArchitecture.Application.Services.AuthenticationService;
 using CleanArchitecture.Application.Services.CurrentUserService;
 using CleanArchitecture.Application.Services.EmailsService;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Entities.Identity;
+using CleanArchitecture.Infrastructure.Repositories.CartRepository;
 using CleanArchitecture.Infrastructure.Repositories.UserRepository;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Features.Authentication.Handlers
 {
@@ -22,14 +25,16 @@ namespace CleanArchitecture.Application.Features.Authentication.Handlers
         private readonly IAuthenticationService _authenticationService;
         private readonly IEmailsService _emailsService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ICartRepository _cartRepository;
 
-        public AuthenticationHandlerCommand(IUserRepository userRepository, SignInManager<User> signInManager, IAuthenticationService authenticationService, IEmailsService emailsService, ICurrentUserService currentUserService)
+        public AuthenticationHandlerCommand(IUserRepository userRepository, SignInManager<User> signInManager, IAuthenticationService authenticationService, IEmailsService emailsService, ICurrentUserService currentUserService, ICartRepository cartRepository)
         {
             _userRepository = userRepository;
             _signInManager = signInManager;
             _authenticationService = authenticationService;
             _emailsService = emailsService;
             _currentUserService = currentUserService;
+            _cartRepository = cartRepository;
         }
 
         public async Task<Response<AuthJwtResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
@@ -41,7 +46,11 @@ namespace CleanArchitecture.Application.Features.Authentication.Handlers
 
             var checkPassword = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!checkPassword.Succeeded) { return BadRequest<AuthJwtResult>("Email or Password not correct"); }
-
+            var isExistCart = await _cartRepository.GetTableNoTracking().FirstOrDefaultAsync(e => e.UserID == user.Id);
+            if (isExistCart == null)
+            {
+                await _cartRepository.AddAsync(new ShoppingCart() { UserID = user.Id, CreatedDate = DateTime.UtcNow });
+            }
 
             var jwtAuthTokens = await _authenticationService.GetJWTToken(user);
             return Success(jwtAuthTokens);

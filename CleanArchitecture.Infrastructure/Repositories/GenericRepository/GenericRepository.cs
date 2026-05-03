@@ -41,17 +41,18 @@ namespace CleanArchitecture.Infrastructure.Repositories.GenericRepository
             return entity;
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             _dbContext.Set<T>().Update(entity);
             await _dbContext.SaveChangesAsync();
-
+            return entity;
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual async Task<T> DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+            return entity;
         }
         public virtual async Task DeleteRangeAsync(ICollection<T> entities)
         {

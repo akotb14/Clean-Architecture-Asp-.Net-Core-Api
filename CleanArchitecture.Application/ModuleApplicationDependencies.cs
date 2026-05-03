@@ -4,6 +4,7 @@ using CleanArchitecture.Application.Services.CurrentUserService;
 using CleanArchitecture.Application.Services.CurrentUserServices;
 using CleanArchitecture.Application.Services.EmailsService;
 using CleanArchitecture.Application.Services.FileService;
+using CleanArchitecture.Application.Services.PaymobService;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,9 @@ namespace CleanArchitecture.Application
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IPaymobService, PaymobService>();
+            //HttpClient
+            services.AddHttpClient();
             //Configuration Of Mediator
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             //Configuration Of Automapper
